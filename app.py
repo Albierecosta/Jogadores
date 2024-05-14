@@ -9,13 +9,14 @@ def formar_equipes():
     nomes = data['nomes']
 
     nomes_ordenados = sorted(nomes, key=lambda x: int(x.split(" - ")[1]), reverse=True)
+    
 
     num_equipes = (len(nomes) + 4) // 5
     equipes = [[] for _ in range(num_equipes)]
 
     for i, nome in enumerate(nomes_ordenados):
         index_equipe = i % num_equipes
-        equipes[index_equipe].append(nome)
+        equipes[index_equipe].append(nome.split(" - ")[0])
 
     return jsonify({'equipes': equipes})
 
