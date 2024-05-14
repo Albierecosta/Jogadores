@@ -5,16 +5,17 @@ app = Flask(__name__)
 
 @app.route('/api/formar_equipes', methods=['POST'])
 def formar_equipes():
-    nomes = request.get_json()['nomes']
-    random.shuffle(nomes)
+    data = request.get_json()
+    nomes = data['nomes']
 
-    tamanho_equipe = 5
+    nomes_ordenados = sorted(nomes, key=lambda x: int(x.split(" - ")[1]), reverse=True)
 
-    num_equipes = len(nomes) // tamanho_equipe
-    equipes = [nomes[i:i+tamanho_equipe] for i in range(0, num_equipes * tamanho_equipe, tamanho_equipe)]
-    
-    if len(nomes) % tamanho_equipe != 0:
-        equipes.append(nomes[num_equipes * tamanho_equipe:])
+    num_equipes = (len(nomes) + 4) // 5
+    equipes = [[] for _ in range(num_equipes)]
+
+    for i, nome in enumerate(nomes_ordenados):
+        index_equipe = i % num_equipes
+        equipes[index_equipe].append(nome)
 
     return jsonify({'equipes': equipes})
 
